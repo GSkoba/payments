@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,8 +17,6 @@ import javax.validation.constraints.NotNull;
 public class PaymentController {
 
     private final PaymentService paymentService;
-
-    private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
     public PaymentController(@NotNull final PaymentService paymentService) {

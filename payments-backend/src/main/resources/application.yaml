@@ -6,7 +6,6 @@ management:
     web:
       base-path: /
 
-
 sharding-db:
   init-script: "init.sql"
   connections:
@@ -19,3 +18,13 @@ sharding-db:
     - url: "jdbc:postgresql://localhost:5434/postgres"
       username: "postgres"
       password: "secret"
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: myGroup
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    template:
+      default-topic: "billing"

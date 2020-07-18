@@ -19,8 +19,8 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class PaymentRepository {
 
-    public static final String INSERT_QUERY = "insert into payments(user_from, user_to, money) values (?, ?, ?);";
-    public static final String AGGREGATE_QUERY = "select sum(money) from payments where user_from = ?;";
+    private static final String INSERT_QUERY = "insert into payments(user_from, user_to, money) values (?, ?, ?);";
+    private static final String AGGREGATE_QUERY = "select sum(money) from payments where user_from = ?;";
     private final List<DataSource> dataSources;
     private final AtomicInteger counter = new AtomicInteger();
     private final int connectionCount;

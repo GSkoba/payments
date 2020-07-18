@@ -6,6 +6,7 @@ import com.skobelev.payments.dto.PaymentDto;
 import com.skobelev.payments.model.UserBillAggregate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,12 +18,15 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final RestTemplate restTemplate;
+    private final KafkaTemplate<String, UserBillAggregate> kafkaTemplate;
 
     @Autowired
     public PaymentService(@NotNull final PaymentRepository paymentRepository,
-                          @NotNull final RestTemplate restTemplate) {
+                          @NotNull final RestTemplate restTemplate,
+                          @NotNull final KafkaTemplate<String, UserBillAggregate> kafkaTemplate) {
         this.paymentRepository = paymentRepository;
         this.restTemplate = restTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public void transfer(@NotNull final List<PaymentDto> payments) {
@@ -41,6 +45,7 @@ public class PaymentService {
                         new HttpEntity<>(aggregate), Void.class);
                 break;
             case TOPIC:
+                kafkaTemplate.send("billing", aggregate);
 
         }
     }
