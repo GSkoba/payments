@@ -1,4 +1,5 @@
 rootProject.name = 'payments'
 
+include 'payments-core'
 include 'payments-backend'
 include 'payments-consumer'

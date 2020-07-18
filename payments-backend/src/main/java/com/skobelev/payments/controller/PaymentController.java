@@ -1,6 +1,7 @@
 package com.skobelev.payments.controller;
 
 import com.skobelev.payments.dto.TransferRequest;
+import com.skobelev.payments.model.UserBillAggregate;
 import com.skobelev.payments.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/payment")
@@ -34,7 +36,10 @@ public class PaymentController {
 
     @GetMapping("/test")
     public void test() {
-        String hello = "hello friend";
-        restTemplate.postForEntity("http://localhost:8081/test", new HttpEntity<String>(hello), Void.class);
+        UserBillAggregate aggregate = new UserBillAggregate();
+        aggregate.setUsername("Grisha");
+        aggregate.setAggregateBill(BigDecimal.valueOf(100));
+        restTemplate.postForEntity("http://localhost:8081/test",
+                new HttpEntity<UserBillAggregate>(aggregate), Void.class);
     }
 }
