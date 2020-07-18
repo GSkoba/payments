@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      base-path: /
+
+
+sharding-db:
+  init-script: "init.sql"
+  connections:
+    - url: "jdbc:postgresql://localhost:5432/postgres"
+      username: "postgres"
+      password: "secret"
+    - url: "jdbc:postgresql://localhost:5433/postgres"
+      username: "postgres"
+      password: "secret"
+    - url: "jdbc:postgresql://localhost:5434/postgres"
+      username: "postgres"
+      password: "secret"
