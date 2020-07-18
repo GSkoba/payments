@@ -3,16 +3,13 @@ package com.skobelev.payments.config;
 import com.skobelev.payments.config.properties.ShardingDbProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.SneakyThrows;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.nio.file.Files;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +20,7 @@ public class ShardingDbConfig {
     private String initScript;
 
     @Bean
-    public List<DataSource> dataSources(ShardingDbProperties properties) {
+    public List<DataSource> dataSources(@NotNull final ShardingDbProperties properties) {
         return properties.getConnections().stream().map(connection -> {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(connection.getUrl());

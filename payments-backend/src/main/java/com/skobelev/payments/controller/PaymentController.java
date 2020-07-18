@@ -1,11 +1,11 @@
 package com.skobelev.payments.controller;
 
+import com.skobelev.payments.dto.BillAggregateRequest;
 import com.skobelev.payments.dto.TransferRequest;
 import com.skobelev.payments.model.UserBillAggregate;
 import com.skobelev.payments.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @RestController
@@ -21,10 +22,10 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(@NotNull final PaymentService paymentService) {
         this.paymentService = paymentService;
     }
 
@@ -34,12 +35,12 @@ public class PaymentController {
         paymentService.transfer(payments.getPayments());
     }
 
-    @GetMapping("/test")
-    public void test() {
+    @PostMapping("/aggregate")
+    public void test(@RequestBody @Valid BillAggregateRequest billAggregateRequest) {
         UserBillAggregate aggregate = new UserBillAggregate();
-        aggregate.setUsername("Grisha");
+        aggregate.setUsername(billAggregateRequest.getUsername());
         aggregate.setAggregateBill(BigDecimal.valueOf(100));
-        restTemplate.postForEntity("http://localhost:8081/test",
+        restTemplate.postForEntity(billAggregateRequest.getUrl(),
                 new HttpEntity<UserBillAggregate>(aggregate), Void.class);
     }
 }

@@ -5,13 +5,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Configuration
 public class PaymentAppConfig {
 
     @Bean
-    public PaymentRepository paymentDao(List<DataSource> dataSources) {
+    public PaymentRepository paymentDao(@NotNull final List<DataSource> dataSources) {
         return new PaymentRepository(dataSources);
     }
 }
