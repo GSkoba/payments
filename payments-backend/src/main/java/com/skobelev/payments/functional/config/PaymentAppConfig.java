@@ -1,4 +1,4 @@
-package com.skobelev.payments.config;
+package com.skobelev.payments.functional.config;
 
 import com.skobelev.payments.dao.PaymentRepository;
 import org.springframework.context.annotation.Bean;

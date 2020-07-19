@@ -1,4 +1,4 @@
-package com.skobelev.payments.config.properties;
+package com.skobelev.payments.functional.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

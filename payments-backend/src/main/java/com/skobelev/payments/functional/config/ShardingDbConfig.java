@@ -1,11 +1,10 @@
-package com.skobelev.payments.config;
+package com.skobelev.payments.functional.config;
 
-import com.skobelev.payments.config.properties.ShardingDbProperties;
+import com.skobelev.payments.functional.config.properties.ShardingDbProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

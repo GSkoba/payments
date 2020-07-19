@@ -1,0 +1,24 @@
+{
+  "payments": [
+    {
+      "from" : "Grisha",
+      "to" : "Nasty",
+      "money" : 10
+    },
+    {
+      "from" : "Grisha",
+      "to" : "Katy",
+      "money" : 25
+    },
+    {
+      "from" : "Vova",
+      "to" : "Vika",
+      "money" : 60
+    },
+    {
+      "from" : "Dasha",
+      "to" : "Prince",
+      "money" : 10
+    }
+  ]
+}
