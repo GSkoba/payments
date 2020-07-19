@@ -25,7 +25,6 @@ public class BillAggregateResponseService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-
     public void sendResponse(BillAggregateRequest request, UserBillAggregate aggregate) {
         switch (request.getPayloadType()) {
             case URL:
@@ -42,10 +41,10 @@ public class BillAggregateResponseService {
         try {
             response = restTemplate.postForEntity(url,
                     new HttpEntity<>(aggregate), Void.class);
-            if (!HttpStatus.OK.equals(response.getStatusCode())) {
-                throw new IllegalStateException(String.format("Bad Request on url %s", url));
-            }
         } catch (Exception ex) {
+            throw new IllegalStateException(String.format("Bad Request on url %s", url));
+        }
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
             throw new IllegalStateException(String.format("Bad Request on url %s", url));
         }
     }

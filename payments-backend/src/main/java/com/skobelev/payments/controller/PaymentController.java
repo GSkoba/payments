@@ -25,7 +25,6 @@ public class PaymentController {
 
     @PostMapping("/transfer")
     public void moneyTransfer(@RequestBody @Valid TransferRequest payments) {
-        payments.getPayments().forEach(System.out::println);
         paymentService.transfer(payments.getPayments());
     }
 

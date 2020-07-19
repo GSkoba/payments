@@ -7,7 +7,6 @@ management:
       base-path: /
 
 sharding-db:
-  init-script: "init.sql"
   connections:
     - url: "jdbc:postgresql://localhost:5432/postgres"
       username: "postgres"

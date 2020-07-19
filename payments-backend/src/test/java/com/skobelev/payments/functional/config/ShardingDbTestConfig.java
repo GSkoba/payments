@@ -1,47 +1,82 @@
 package com.skobelev.payments.functional.config;
 
+import static org.apache.kafka.clients.admin.AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG;
+
+import lombok.Getter;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.test.TestUtils;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.shaded.com.google.common.io.Resources;
 
 import javax.annotation.PreDestroy;
-import java.io.IOException;
+import java.util.Collections;
+import java.util.Properties;
 
 @TestConfiguration
 public class ShardingDbTestConfig {
 
+    private static final String PASSWORD = "secret";
+    private static final String USERNAME = "postgres";
+    private static final String DOCKER_IMAGE_VERSION = "postgres:12";
+
     private static final PostgreSQLContainer<?> firstContainer =
-            new PostgreSQLContainer<>("postgres:12")
-                    .withPassword("secret")
-                    .withUsername("postgres");
+            new PostgreSQLContainer<>(DOCKER_IMAGE_VERSION)
+                    .withPassword(PASSWORD)
+                    .withUsername(USERNAME);
 
     private static final PostgreSQLContainer<?> secondContainer =
-            new PostgreSQLContainer<>("postgres:12")
-                    .withPassword("secret")
-                    .withUsername("postgres");
+            new PostgreSQLContainer<>(DOCKER_IMAGE_VERSION)
+                    .withPassword(PASSWORD)
+                    .withUsername(USERNAME);
 
     private static final PostgreSQLContainer<?> thirdContainer =
-            new PostgreSQLContainer<>("postgres:12")
-                    .withPassword("secret")
-                    .withUsername("postgres");
+            new PostgreSQLContainer<>(DOCKER_IMAGE_VERSION)
+                    .withPassword(PASSWORD)
+                    .withUsername(USERNAME);
 
     private static final KafkaContainer kafkaContainer =
             new KafkaContainer();
 
+    @Getter
+    private final Properties consumer;
+
     @SneakyThrows
     public ShardingDbTestConfig() {
-        firstContainer.start();
-        secondContainer.start();
-        thirdContainer.start();
+        start(firstContainer, secondContainer, thirdContainer);
         kafkaContainer.start();
-        setContainerProperty();
+        createKafkaTopic();
+        consumer = configConsumer();
+        setSystemProperty();
     }
 
-    private void setContainerProperty() {
+    private Properties configConsumer() {
+        Properties consumer = TestUtils.consumerConfig(kafkaContainer.getBootstrapServers(),
+                StringDeserializer.class, JsonDeserializer.class);
+        consumer.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return consumer;
+    }
+
+    private void start(PostgreSQLContainer<?>... containers) {
+        for (PostgreSQLContainer<?> container : containers) {
+            container.start();
+        }
+    }
+
+    private void createKafkaTopic() {
+        NewTopic topic = new NewTopic("billing", 1, (short) 1);
+        Properties properties = new Properties();
+        properties.put(BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());
+        try (AdminClient adminClient = AdminClient.create(properties)) {
+            adminClient.createTopics(Collections.singleton(topic));
+        }
+    }
+
+    private void setSystemProperty() {
         System.setProperty("sharding-db.connections[0].url", firstContainer.getJdbcUrl());
         System.setProperty("sharding-db.connections[0].username", firstContainer.getUsername());
         System.setProperty("sharding-db.connections[0].password", firstContainer.getPassword());
@@ -61,37 +96,4 @@ public class ShardingDbTestConfig {
         thirdContainer.close();
         kafkaContainer.start();
     }
-//
-//    @Bean(destroyMethod = "close")
-//    public PostgreSQLContainer<?> firstPostgresContainer() {
-//        PostgreSQLContainer<?> container =
-//                new PostgreSQLContainer<>("postgres:12")
-//                .withPassword("secret")
-//                .withUsername("postgres");
-//        container.start();
-//        System.setProperty("sharding-db.connections[0].url", container.getJdbcUrl());
-//        return container;
-//    }
-//
-//    @Bean(destroyMethod = "close")
-//    public PostgreSQLContainer<?> secondPostgresContainer() {
-//        PostgreSQLContainer<?> container =
-//                new PostgreSQLContainer<>("postgres:12")
-//                        .withPassword("secret")
-//                        .withUsername("postgres");
-//        container.start();
-//        System.setProperty("sharding-db.connections[1].url", container.getJdbcUrl());
-//        return container;
-//    }
-//
-//    @Bean(destroyMethod = "close")
-//    public PostgreSQLContainer<?> thirdPostgresContainer() {
-//        PostgreSQLContainer<?> container =
-//                new PostgreSQLContainer<>("postgres:12")
-//                        .withPassword("secret")
-//                        .withUsername("postgres");
-//        container.start();
-//        System.setProperty("sharding-db.connections[2].url", container.getJdbcUrl());
-//        return container;
-//    }
 }

@@ -31,8 +31,9 @@ public class PaymentService {
     }
 
     public void billAggregate(@NotNull final BillAggregateRequest request) {
-        validatorService.validateBillRequest(request);
-        UserBillAggregate aggregate = paymentRepository.billAggregate(request.getUsername());
-        responseService.sendResponse(request, aggregate);
+        if (validatorService.validateBillRequest(request)) {
+            UserBillAggregate aggregate = paymentRepository.billAggregate(request.getUsername());
+            responseService.sendResponse(request, aggregate);
+        }
     }
 }

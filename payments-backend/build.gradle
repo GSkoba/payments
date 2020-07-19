@@ -30,10 +30,15 @@ dependencies {
     testImplementation "org.testcontainers:postgresql:1.14.3"
     testImplementation "org.testcontainers:kafka:1.14.3"
     testImplementation 'com.google.code.gson:gson:2.8.6'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation "org.testcontainers:kafka"
+    testImplementation "org.apache.kafka:kafka-streams-test-utils"
+    testImplementation group: 'org.apache.kafka', name: 'kafka-streams', classifier: 'test'
+    testImplementation group: 'org.apache.kafka', name: 'kafka-clients', classifier: 'test'
 }
 
 test {
     useJUnitPlatform {
-        include('com/skobelev/payments/functional/**')
+        include('com/skobelev/payments/**')
     }
 }

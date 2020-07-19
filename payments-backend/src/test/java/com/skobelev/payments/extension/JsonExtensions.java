@@ -1,4 +1,4 @@
-package com.skobelev.payments.functional.extension;
+package com.skobelev.payments.extension;
 
 import com.google.gson.Gson;
 import lombok.SneakyThrows;

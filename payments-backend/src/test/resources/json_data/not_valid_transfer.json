@@ -1,0 +1,9 @@
+{
+  "payments": [
+    {
+      "from" : "Grisha",
+      "to" : "",
+      "money" : 10
+    }
+  ]
+}

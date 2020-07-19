@@ -48,7 +48,6 @@ public class PaymentRepository {
                     }
                 });
                 int[] stored = preparedStatement.executeBatch();
-                System.out.println(Arrays.toString(stored));
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

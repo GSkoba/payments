@@ -1,4 +1,4 @@
-package com.skobelev.payments.functional.config.properties;
+package com.skobelev.payments.config.properties;
 
 import lombok.Data;
 

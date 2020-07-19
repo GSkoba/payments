@@ -1,10 +1,9 @@
-package com.skobelev.payments.functional.config;
+package com.skobelev.payments.config;
 
-import com.skobelev.payments.functional.config.properties.ShardingDbProperties;
+import com.skobelev.payments.config.properties.ShardingDbProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,9 +14,6 @@ import java.util.stream.Collectors;
 
 @Configuration
 public class ShardingDbConfig {
-
-    @Value("${sharding-db.init-script}")
-    private String initScript;
 
     @Bean
     public List<DataSource> dataSources(@NotNull final ShardingDbProperties properties) {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BillAggregateValidatorService {
 
-    public void validateBillRequest(BillAggregateRequest request) {
+    public boolean validateBillRequest(BillAggregateRequest request) {
         if (PayloadType.URL.equals(request.getPayloadType()) &&
                 (request.getUrl() == null || request.getUrl().isEmpty())) {
             throw new IllegalArgumentException("Url in payload cant be empty");
@@ -16,5 +16,6 @@ public class BillAggregateValidatorService {
                 (request.getTopic() == null || request.getTopic().isEmpty())) {
             throw new IllegalArgumentException("Kafka topic in payload cant be empty");
         }
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package com.skobelev.payments.functional.extension;
+package com.skobelev.payments.extension;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
