@@ -29,7 +29,7 @@ public class PaymentController {
         paymentService.transfer(payments.getPayments());
     }
 
-    @PostMapping("/bill")
+    @PostMapping("/summarize")
     public void test(@RequestBody @Valid BillAggregateRequest billAggregateRequest) {
         paymentService.billAggregate(billAggregateRequest);
     }

@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDto {
+public class Payment {
+
     @NotBlank
     private String from;
 

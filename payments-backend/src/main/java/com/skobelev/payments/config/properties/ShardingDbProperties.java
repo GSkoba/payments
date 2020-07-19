@@ -14,5 +14,4 @@ public class ShardingDbProperties {
 
     @NotEmpty(message = "Data base connection list cannot be empty")
     private List<DbConnection> connections;
-
 }

@@ -1,6 +1,6 @@
 package com.skobelev.payments.dao;
 
-import com.skobelev.payments.dto.PaymentDto;
+import com.skobelev.payments.dto.Payment;
 import com.skobelev.payments.model.UserBillAggregate;
 
 import javax.sql.DataSource;
@@ -30,8 +30,8 @@ public class PaymentRepository {
         this.connectionCount = dataSources.size();
     }
 
-    public void add(@NotNull final List<PaymentDto> payments) {
-        Map<Integer, List<PaymentDto>> paymentMap =
+    public void add(@NotNull final List<Payment> payments) {
+        Map<Integer, List<Payment>> paymentMap =
                 payments.stream().collect(groupingBy(payment -> counter.getAndIncrement() % connectionCount + 1));
         for (Integer partition: paymentMap.keySet()) {
             DataSource dataSource = dataSources.get(partition - 1);

@@ -10,7 +10,8 @@ import java.util.List;
 @Data
 @Validated
 public class TransferRequest {
+
     @Valid
     @NotEmpty(message = "Input payments list cannot be empty.")
-    private List<PaymentDto> payments;
+    private List<Payment> payments;
 }
