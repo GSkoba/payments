@@ -1,6 +1,7 @@
 package com.skobelev.payments.service;
 
 import com.skobelev.payments.dto.BillAggregateRequest;
+import com.skobelev.payments.exceptions.ServerNotFoundException;
 import com.skobelev.payments.model.UserBillAggregate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +47,11 @@ public class BillAggregateResponseService {
                     new HttpEntity<>(aggregate), Void.class);
         } catch (Exception ex) {
             log.error("Bad request on url {}", url, ex);
-            throw new IllegalStateException(String.format("Bad request on url %s", url));
+            throw new ServerNotFoundException(String.format("Bad request on url %s", url));
         }
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
             log.error("Bad request on url {}, status {}", url, response.getStatusCode());
-            throw new IllegalStateException(String.format("Bad request on url %s", url));
+            throw new ServerNotFoundException(String.format("Bad request on url %s", url));
         }
     }
 

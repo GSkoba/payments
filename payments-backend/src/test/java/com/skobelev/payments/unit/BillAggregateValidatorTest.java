@@ -2,6 +2,7 @@ package com.skobelev.payments.unit;
 
 import com.skobelev.payments.dto.BillAggregateRequest;
 import com.skobelev.payments.dto.PayloadType;
+import com.skobelev.payments.exceptions.NotValidBillAggregateRequestException;
 import com.skobelev.payments.service.BillAggregateValidatorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class BillAggregateValidatorTest {
     void notValidUrl() {
         BillAggregateRequest request =
                 buildRequest("Vim", null, null, PayloadType.URL);
-        assertThrows(IllegalArgumentException.class, () -> validatorService.validateBillRequest(request));
+        assertThrows(NotValidBillAggregateRequestException.class, () -> validatorService.validateBillRequest(request));
     }
 
     @Test
@@ -43,7 +44,7 @@ public class BillAggregateValidatorTest {
     void notValidTopic() {
         BillAggregateRequest request =
                 buildRequest("Evgen", null, null, PayloadType.TOPIC);
-        assertThrows(IllegalArgumentException.class, () -> validatorService.validateBillRequest(request));
+        assertThrows(NotValidBillAggregateRequestException.class, () -> validatorService.validateBillRequest(request));
     }
 
     private BillAggregateRequest buildRequest(String username, String url, String topic, PayloadType type) {

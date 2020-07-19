@@ -1,6 +1,8 @@
 package com.skobelev.payments.dao;
 
 import com.skobelev.payments.dto.Payment;
+import com.skobelev.payments.exceptions.SummarizeException;
+import com.skobelev.payments.exceptions.TransferPaymentsException;
 import com.skobelev.payments.model.UserBillAggregate;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,12 +48,14 @@ public class PaymentRepository {
                         preparedStatement.addBatch();
                     } catch (SQLException ex) {
                         log.error("Error to prepare statement", ex);
+                        throw new TransferPaymentsException("Error to transfer payments");
                     }
                 });
                 int[] stored = preparedStatement.executeBatch();
                 log.info("Stored row {} to {} partition", stored.length, partition);
             } catch (SQLException ex) {
                 log.error("Error to execute batch", ex);
+                throw new TransferPaymentsException("Error to transfer payments");
             }
         }
     }
@@ -72,6 +75,7 @@ public class PaymentRepository {
                 }
             } catch (SQLException ex) {
                 log.error("Error get aggregate", ex);
+                throw new SummarizeException("Error get aggregate");
             }
         }
         return new UserBillAggregate(username, aggregate);
