@@ -2,6 +2,7 @@ package com.skobelev.payments.dao;
 
 import com.skobelev.payments.dto.Payment;
 import com.skobelev.payments.model.UserBillAggregate;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.stream.Collectors.groupingBy;
 
+@Slf4j
 public class PaymentRepository {
 
     private static final String INSERT_QUERY = "insert into payments(user_from, user_to, money) values (?, ?, ?);";
@@ -44,12 +46,13 @@ public class PaymentRepository {
                         preparedStatement.setBigDecimal(3, payment.getMoney());
                         preparedStatement.addBatch();
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        log.error("Error to prepare statement", ex);
                     }
                 });
                 int[] stored = preparedStatement.executeBatch();
+                log.info("Stored row {} to {} partition", stored.length, partition);
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                log.error("Error to execute batch", ex);
             }
         }
     }
@@ -67,8 +70,8 @@ public class PaymentRepository {
                         aggregate = aggregate.add(sum);
                     }
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException ex) {
+                log.error("Error get aggregate", ex);
             }
         }
         return new UserBillAggregate(username, aggregate);

@@ -2,6 +2,7 @@ package com.skobelev.payments.service;
 
 import com.skobelev.payments.dto.BillAggregateRequest;
 import com.skobelev.payments.model.UserBillAggregate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.validation.constraints.NotNull;
 
 @Service
+@Slf4j
 public class BillAggregateResponseService {
 
     private final RestTemplate restTemplate;
@@ -37,19 +39,23 @@ public class BillAggregateResponseService {
     }
 
     public void sendResponseByUrl(String url, UserBillAggregate aggregate) {
+        log.info("Send data to remote server by url");
         ResponseEntity<Void> response;
         try {
             response = restTemplate.postForEntity(url,
                     new HttpEntity<>(aggregate), Void.class);
         } catch (Exception ex) {
-            throw new IllegalStateException(String.format("Bad Request on url %s", url));
+            log.error("Bad request on url {}", url, ex);
+            throw new IllegalStateException(String.format("Bad request on url %s", url));
         }
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new IllegalStateException(String.format("Bad Request on url %s", url));
+            log.error("Bad request on url {}, status {}", url, response.getStatusCode());
+            throw new IllegalStateException(String.format("Bad request on url %s", url));
         }
     }
 
     public void sendResponseByKafkaTopic(String topic, UserBillAggregate aggregate) {
+        log.info("Send data to kafka topic");
         kafkaTemplate.send(topic, aggregate);
     }
 }
