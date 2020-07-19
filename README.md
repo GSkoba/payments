@@ -34,7 +34,7 @@ Content-Type: application/json
 - TOPIC - выгрузка данных происходит в kafka topic 
 #### URL
 ```
-POST http://localhost:8080/payment/aggregate
+POST http://localhost:8080/payment/bill
 Content-Type: application/json
 {
     "username": "Misha",
@@ -44,7 +44,7 @@ Content-Type: application/json
 ```
 #### Topic
 ```
-POST http://localhost:8080/payment/aggregate
+POST http://localhost:8080/payment/bill
 Content-Type: application/json
 {
     "username": "Misha",

@@ -1,5 +1,9 @@
 description = 'backend'
 
+configurations {
+    implementation.exclude module: "spring-boot-starter-tomcat"
+}
+
 dependencies {
     implementation project(':payments-core')
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
